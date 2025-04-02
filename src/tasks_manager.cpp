@@ -9,14 +9,8 @@
 TasksManager::TasksManager(){
     tasks = new set<BasicTask*, TaskPriorityCompare>();
 }
-// for (BasicTask* task : *tasks) {
-//     Task* derivedTask = dynamic_cast<Task*>(task);
-//     if (derivedTask) {
-//         derivedTask->displayDetails();
-//     }
-// }
 TasksManager::~TasksManager(){
-    for (auto it = tasks->begin(); it != tasks->end(); ++it) {
+    for (set<BasicTask*,TaskPriorityCompare>::iterator it = tasks->begin(); it != tasks->end(); ++it) {
         delete *it;  
     }
     delete tasks;
@@ -63,7 +57,7 @@ void TasksManager::addTask(const string* name, const string* category){
         getline(cin, *dueDate);
         cout << "Enter priority (1-10): ";
         cin >> *priority;
-        //cin.clear();
+        cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Enter estimated hours: ";
         cin >> *hours;
@@ -86,7 +80,7 @@ void TasksManager::addTask(const string* name, const string* category){
 }
 
 void TasksManager::deleteTask(int* taskId){
-    for(auto it=tasks->begin();it!=tasks->end();it++){
+    for(set<BasicTask*,TaskPriorityCompare>::iterator it=tasks->begin();it!=tasks->end();it++){
         Task* task = dynamic_cast<Task*>(*it);
         if(task && task->getId() == *taskId){
             delete task;
@@ -97,7 +91,7 @@ void TasksManager::deleteTask(int* taskId){
 }
 
 void TasksManager::editTask(int* taskId, const string* newName,const bool* isCompleted) {
-    for (auto it = tasks->begin(); it != tasks->end(); ++it) {
+    for (set<BasicTask*,TaskPriorityCompare>::iterator it = tasks->begin(); it != tasks->end(); ++it) {
         Task* task = dynamic_cast<Task*>(*it);
         if (task && task->getId() == *taskId) {
             task->setName(newName);
@@ -120,7 +114,7 @@ void TasksManager::viewTasks() const {
         return;
     }
     
-    for (auto it = tasks->begin(); it != tasks->end(); ++it) {
+    for (set<BasicTask*,TaskPriorityCompare>::iterator it = tasks->begin(); it != tasks->end(); ++it) {
         Task* task = dynamic_cast<Task*>(*it);
         if(task){
             task->displayDetails();
@@ -133,7 +127,7 @@ void TasksManager::viewTasksByStatus(const bool* completed) const{
 
     bool found = false;
     
-    for (auto it = tasks->begin(); it != tasks->end(); ++it) {
+    for (set<BasicTask*,TaskPriorityCompare>::iterator it = tasks->begin(); it != tasks->end(); ++it) {
         Task* task = dynamic_cast<Task*>(*it);
         if (task && task->isCompleted() == *completed) {
             task->displayDetails();
@@ -149,7 +143,7 @@ void TasksManager::viewTasksByCategory(const string* category) const {
     cout << "\n=== Tasks in Category: " << *category << " ===\n";
     bool found = false;
     
-    for (auto it = tasks->begin(); it != tasks->end(); ++it) {
+    for (set<BasicTask*,TaskPriorityCompare>::iterator it = tasks->begin(); it != tasks->end(); ++it) {
         Task* task = dynamic_cast<Task*>(*it);
         if (task && task->getCategory() == *category) {
             task->displayDetails();
